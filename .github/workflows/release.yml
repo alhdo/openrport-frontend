@@ -42,7 +42,7 @@ jobs:
           # Create ZIP file
           (cd .output/public && zip -r - .) > "${ARTIFACT_NAME}.zip"
           
-          echo "artifact_name=$ARTIFACT_NAME" >> GITHUB_OUTPUT
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
         id: create_artifact
 
       - name: Create Github Release
