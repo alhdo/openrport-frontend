@@ -13,9 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get TAG Version
-        id: get_tag
-        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+#      - name: Get TAG Version
+#        id: get_tag
+#        run: |
+#          TAG=${GITHUB_REF#refs/tags/}
+#          echo "::set-ouput"
+
+      - name: Get version number from package.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          echo "::set-output name=version::$VERSION"
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,7 +38,7 @@ jobs:
 
       - name: Create dist folder
         run: |
-          ARTIFACT_NAME="openrport-frontend-${env.TAG}"
+          ARTIFACT_NAME=`openrport-frontend-${steps.get_version.outputs.version}`
           zip -r "${ARTIFACT_NAME}.zip" ./output
 
       - name: Create Github Release
@@ -42,8 +50,8 @@ jobs:
             const release = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${env.TAG}`,
-              name: `v${env.TAG}`,
+              tag_name: `v${steps.get_version.outputs.version}`,
+              name: `v${steps.get_version.outputs.version}`,
               body: changelog
             })
             
