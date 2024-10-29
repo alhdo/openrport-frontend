@@ -41,7 +41,7 @@ jobs:
           ARTIFACT_NAME="openrport-frontend-${{ steps.get_version.outputs.version }}"
           
           # Create ZIP file
-          zip -r "${ARTIFACT_NAME}.zip" ./output
+          (cd .output/public && zip -r - .) > "${ARTIFACT_NAME}.zip"
 
       - name: Create Github Release
         uses: actions/github-script@v7
