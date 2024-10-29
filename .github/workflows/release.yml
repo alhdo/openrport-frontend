@@ -30,7 +30,7 @@ jobs:
 
       - name: Create dist folder
         run: |
-          ARTIFACT_NAME="openrport-frontend-${env.TAG}
+          ARTIFACT_NAME="openrport-frontend-${env.TAG}"
           zip -r "${ARTIFACT_NAME}.zip" ./output
 
       - name: Create Github Release
