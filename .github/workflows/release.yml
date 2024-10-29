@@ -38,7 +38,9 @@ jobs:
 
       - name: Create dist folder
         run: |
-          ARTIFACT_NAME=`openrport-frontend-${{ steps.get_version.outputs.version }}`
+          ARTIFACT_NAME="openrport-frontend-${{ steps.get_version.outputs.version }}"
+          
+          # Create ZIP file
           zip -r "${ARTIFACT_NAME}.zip" ./output
 
       - name: Create Github Release
