@@ -46,22 +46,22 @@ jobs:
         id: create_artifact
 
       - name: Create Github Release
-        uses: actions/github-script@v7
+        uses: softprops/action-gh-release@v2
         with:
+          tag_name: "v${{ steps.get_version.outputs.version }}"
+          name: "Release v${{ steps.get_version.outputs.version }}"
+          files: |
+            ${{ env.artifact_name }}.zip
+          generate_release_notes: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const changelog = "New version";
-            const release = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `v${{ steps.get_version.outputs.version }}`,
-              name: `v${{ steps.get_version.outputs.version }}`,
-              body: changelog
-            })
-            
-      - name: Upload artifacts to Github Release
-        uses: actions/upload-artifact@v4
-        with: 
-          name: package
-          path: ${{ env.artifact_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#      - name: Upload artifacts to Github Release
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: package
+#          path: ${{ env.artifact_name }}.zip
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
